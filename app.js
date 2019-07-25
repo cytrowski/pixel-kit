@@ -9,8 +9,8 @@ const getImageAsset = ({ src, width, height, tileWidth, tileHeight }) =>
 const gridSize = 16;
 const zoomLevel = 4;
 const canvasId = "viewport";
-const boardWidth = 3;
-const boardHeight = 3;
+const boardWidth = 6;
+const boardHeight = 6;
 
 const play = async () => {
   const viewportNode = document.getElementById(canvasId);
@@ -106,10 +106,10 @@ const play = async () => {
     if (event.code === "ArrowDown") {
       player.y = player.y + 1;
     }
-    if (player.x < 0 || player.x > 2) {
+    if (player.x < 0 || player.x > boardWidth - 1) {
       player.x = currentPosition.x;
     }
-    if (player.y < 0 || player.y > 2) {
+    if (player.y < 0 || player.y > boardHeight - 1) {
       player.y = currentPosition.y;
     }
   });
