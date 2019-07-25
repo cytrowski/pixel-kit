@@ -37,17 +37,29 @@ const play = async () => {
     states: {
       idle: {
         frames: [
-          { src: warriorSprite, x: 1, y: 1 }
-          // { src: warriorSprite, x: 0, y: 1 }
+          { src: warriorSprite, x: 1, y: 1 },
+          { src: warriorSprite, x: 0, y: 1 }
         ],
         index: 0
       }
     }
   };
 
+  let totalTime = 0;
+
   const tick = dTime => {
+    totalTime = totalTime + dTime;
+    console.log(totalTime);
     const state = player.states[player.currentState];
     const frame = state.frames[state.index];
+
+    if (totalTime > 1000) {
+      totalTime = totalTime - 1000;
+      state.index = state.index + 1;
+      if (state.index > state.frames.length - 1) {
+        state.index = 0;
+      }
+    }
 
     ctx.drawImage(
       frame.src.image,
