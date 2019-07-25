@@ -9,7 +9,7 @@ const getImageAsset = ({ src, width, height, tileWidth, tileHeight }) =>
 const gridSize = 16;
 const zoomLevel = 4;
 const canvasId = "viewport";
-const boardWidth = 6;
+const boardWidth = 3;
 const boardHeight = 6;
 
 const play = async () => {
@@ -30,8 +30,8 @@ const play = async () => {
   });
 
   const player = {
-    x: 1,
-    y: 1,
+    x: Math.floor(boardWidth / 2 - 0.5),
+    y: Math.floor(boardHeight / 2 - 0.5),
     path: [],
     currentState: "idle",
     states: {
