@@ -29,6 +29,14 @@ const play = async () => {
     tileHeight: 15
   });
 
+  const wallSprite = await getImageAsset({
+    src: "tiles0.png",
+    width: 256,
+    height: 64,
+    tileWidth: 16,
+    tileHeight: 16
+  });
+
   const player = {
     x: Math.floor(boardWidth / 2 - 0.5),
     y: Math.floor(boardHeight / 2 - 0.5),
@@ -45,32 +53,38 @@ const play = async () => {
     }
   };
 
-  let totalTime = 0;
-
-  const tick = dTime => {
-    totalTime = totalTime + dTime;
-    const state = player.states[player.currentState];
-    const frame = state.frames[state.index];
-
-    if (totalTime > 1000) {
-      totalTime = totalTime - 1000;
-      state.index = state.index + 1;
-      if (state.index > state.frames.length - 1) {
-        state.index = 0;
+  const wall = {
+    x: 1,
+    y: 1,
+    currentState: "standing",
+    states: {
+      standing: {
+        frames: [{ src: wallSprite, x: 0, y: 1 }],
+        index: 0
       }
     }
+  };
 
-    ctx.drawImage(
-      frame.src.image,
-      frame.x * frame.src.tileWidth,
-      frame.y * frame.src.tileHeight,
-      frame.src.tileWidth,
-      frame.src.tileHeight,
-      player.x * gridSize + Math.floor((gridSize - frame.src.tileWidth) / 2),
-      player.y * gridSize + Math.floor((gridSize - frame.src.tileHeight) / 2),
-      frame.src.tileWidth,
-      frame.src.tileHeight
-    );
+  let totalTime = 0;
+
+  const objects = [wall, player];
+
+  const tick = dTime => {
+    objects.forEach(object => {
+      const state = object.states[object.currentState];
+      const frame = state.frames[state.index];
+      ctx.drawImage(
+        frame.src.image,
+        frame.x * frame.src.tileWidth,
+        frame.y * frame.src.tileHeight,
+        frame.src.tileWidth,
+        frame.src.tileHeight,
+        object.x * gridSize + Math.floor((gridSize - frame.src.tileWidth) / 2),
+        object.y * gridSize + Math.floor((gridSize - frame.src.tileHeight) / 2),
+        frame.src.tileWidth,
+        frame.src.tileHeight
+      );
+    });
   };
 
   let lastPaintMoment = Date.now();
@@ -110,6 +124,10 @@ const play = async () => {
       player.x = currentPosition.x;
     }
     if (player.y < 0 || player.y > boardHeight - 1) {
+      player.y = currentPosition.y;
+    }
+    if (player.x === wall.x && player.y === wall.y) {
+      player.x = currentPosition.x;
       player.y = currentPosition.y;
     }
   });
