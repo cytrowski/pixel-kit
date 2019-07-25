@@ -49,7 +49,6 @@ const play = async () => {
 
   const tick = dTime => {
     totalTime = totalTime + dTime;
-    console.log(totalTime);
     const state = player.states[player.currentState];
     const frame = state.frames[state.index];
 
@@ -89,6 +88,12 @@ const play = async () => {
   };
 
   animate();
+
+  window.addEventListener("keyup", event => {
+    if (event.code === "ArrowRight") {
+      player.x = player.x + 1;
+    }
+  });
 };
 
 play();
