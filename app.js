@@ -70,7 +70,15 @@ const play = async () => {
     }
   });
 
-  const walls = [makeWall({ x: 1, y: 1 }), makeWall({ x: 2, y: 1 })];
+  const cellsMap = ["   ", " ##", "   ", "   ", "   ", "   "];
+
+  const charsWithPositions = cellsMap.flatMap((row, y) =>
+    row.split("").map((char, x) => ({ x, y, char }))
+  );
+
+  const walls = charsWithPositions
+    .filter(item => item.char === "#")
+    .map(({ x, y }) => makeWall({ x, y }));
 
   let totalTime = 0;
 
