@@ -37,9 +37,9 @@ const play = async () => {
     tileHeight: 16
   });
 
-  const player = {
-    x: Math.floor(boardWidth / 2 - 0.5),
-    y: Math.floor(boardHeight / 2 - 0.5),
+  const makePlayer = ({ x, y }) => ({
+    x,
+    y,
     path: [],
     currentState: "idle",
     states: {
@@ -51,7 +51,12 @@ const play = async () => {
         index: 0
       }
     }
-  };
+  });
+
+  const player = makePlayer({
+    x: Math.floor(boardWidth / 2 - 0.5),
+    y: Math.floor(boardHeight / 2 - 0.5)
+  });
 
   const walls = [
     {
