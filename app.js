@@ -139,10 +139,12 @@ const play = async () => {
     if (player.y < 0 || player.y > boardHeight - 1) {
       player.y = currentPosition.y;
     }
-    if (player.x === wall.x && player.y === wall.y) {
-      player.x = currentPosition.x;
-      player.y = currentPosition.y;
-    }
+    walls.forEach(wall => {
+      if (player.x === wall.x && player.y === wall.y) {
+        player.x = currentPosition.x;
+        player.y = currentPosition.y;
+      }
+    });
   });
 };
 
