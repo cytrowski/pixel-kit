@@ -8,7 +8,27 @@
     <link rel="stylesheet" href="app.css" />
   </head>
   <body>
-    <canvas id="viewport"></canvas>
+    <div>
+      hunger
+      <div
+        style="width: 100px; border: 1px solid black; font-family: monospace; margin-bottom: 5px;"
+      >
+        <div
+          id="hunger-bar"
+          style="height: 20px; width: 50%; background: purple; "
+        ></div>
+      </div>
+      health
+      <div
+        style="width: 100px; border: 1px solid black; font-family: monospace; margin-bottom: 5px;"
+      >
+        <div
+          id="health-bar"
+          style="height: 20px; width: 80%; background: red; "
+        ></div>
+      </div>
+      <canvas id="viewport"></canvas>
+    </div>
     <script src="app.js"></script>
   </body>
 </html>

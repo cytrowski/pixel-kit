@@ -40,6 +40,8 @@ const play = async () => {
   const makePlayer = ({ x, y }) => ({
     x,
     y,
+    health: 100,
+    hunger: 100,
     path: [],
     currentState: "idle",
     states: {
@@ -48,6 +50,10 @@ const play = async () => {
           { src: warriorSprite, x: 1, y: 1 },
           { src: warriorSprite, x: 0, y: 1 }
         ],
+        index: 0
+      },
+      dead: {
+        frames: [{ src: warriorSprite, x: 12, y: 1 }],
         index: 0
       }
     }
@@ -111,10 +117,24 @@ const play = async () => {
     .map(({ x, y }) => makeFloor({ x, y }));
 
   let totalTime = 0;
+  let isPlaying = true;
 
   const objects = [...floors, ...walls, player];
+  const hungerBar = document.getElementById("hunger-bar");
+  const healthBar = document.getElementById("health-bar");
 
   const tick = dTime => {
+    totalTime += dTime;
+
+    player.hunger = player.hunger - dTime / 100;
+
+    if (player.hunger < 0) {
+      alert("You died of hunger!");
+      player.currentState = "dead";
+      isPlaying = false;
+    }
+
+    hungerBar.style.width = player.hunger + "%";
     objects.forEach(object => {
       const state = object.states[object.currentState];
       const frame = state.frames[state.index];
@@ -142,6 +162,9 @@ const play = async () => {
     lastPaintMoment = now;
 
     tick(dTime);
+    if (isPlaying === false) {
+      return;
+    }
 
     requestAnimationFrame(animate);
   };
