@@ -70,6 +70,18 @@ const play = async () => {
     }
   });
 
+  const makeFloor = ({ x, y }) => ({
+    x,
+    y,
+    currentState: "basic",
+    states: {
+      basic: {
+        frames: [{ src: wallSprite, x: 1, y: 0 }],
+        index: 0
+      }
+    }
+  });
+
   const cellsMap = [
     "##############",
     "#   #        #",
@@ -94,9 +106,13 @@ const play = async () => {
     .filter(item => item.char === "#")
     .map(({ x, y }) => makeWall({ x, y }));
 
+  const floors = charsWithPositions
+    .filter(item => item.char === " ")
+    .map(({ x, y }) => makeFloor({ x, y }));
+
   let totalTime = 0;
 
-  const objects = [...walls, player];
+  const objects = [...floors, ...walls, player];
 
   const tick = dTime => {
     objects.forEach(object => {
