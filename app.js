@@ -7,10 +7,10 @@ const getImageAsset = ({ src, width, height, tileWidth, tileHeight }) =>
   });
 
 const gridSize = 16;
-const zoomLevel = 4;
+const zoomLevel = 3;
 const canvasId = "viewport";
-const boardWidth = 3;
-const boardHeight = 6;
+const boardWidth = 14;
+const boardHeight = 14;
 
 const play = async () => {
   const viewportNode = document.getElementById(canvasId);
@@ -54,8 +54,8 @@ const play = async () => {
   });
 
   const player = makePlayer({
-    x: Math.floor(boardWidth / 2 - 0.5),
-    y: Math.floor(boardHeight / 2 - 0.5)
+    x: 1,
+    y: 1
   });
 
   const makeWall = ({ x, y }) => ({
@@ -70,8 +70,22 @@ const play = async () => {
     }
   });
 
-  const cellsMap = ["   ", " ##", "   ", "   ", "   ", "   "];
-
+  const cellsMap = [
+    "##############",
+    "#   #        #",
+    "#       #    #",
+    "####### ######",
+    "#       #    #",
+    "#   #     #  #",
+    "#   #     #  #",
+    "#   #     #  #",
+    "######## #####",
+    "#   #     #  #",
+    "#         #  #",
+    "#   #        #",
+    "#   #     #  #",
+    "##############"
+  ];
   const charsWithPositions = cellsMap.flatMap((row, y) =>
     row.split("").map((char, x) => ({ x, y, char }))
   );
