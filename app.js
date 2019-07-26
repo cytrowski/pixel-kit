@@ -53,21 +53,34 @@ const play = async () => {
     }
   };
 
-  const wall = {
-    x: 1,
-    y: 1,
-    currentState: "standing",
-    states: {
-      standing: {
-        frames: [{ src: wallSprite, x: 0, y: 1 }],
-        index: 0
+  const walls = [
+    {
+      x: 1,
+      y: 1,
+      currentState: "standing",
+      states: {
+        standing: {
+          frames: [{ src: wallSprite, x: 0, y: 1 }],
+          index: 0
+        }
+      }
+    },
+    {
+      x: 2,
+      y: 1,
+      currentState: "standing",
+      states: {
+        standing: {
+          frames: [{ src: wallSprite, x: 0, y: 1 }],
+          index: 0
+        }
       }
     }
-  };
+  ];
 
   let totalTime = 0;
 
-  const objects = [wall, player];
+  const objects = [...walls, player];
 
   const tick = dTime => {
     objects.forEach(object => {
