@@ -58,30 +58,19 @@ const play = async () => {
     y: Math.floor(boardHeight / 2 - 0.5)
   });
 
-  const walls = [
-    {
-      x: 1,
-      y: 1,
-      currentState: "standing",
-      states: {
-        standing: {
-          frames: [{ src: wallSprite, x: 0, y: 1 }],
-          index: 0
-        }
-      }
-    },
-    {
-      x: 2,
-      y: 1,
-      currentState: "standing",
-      states: {
-        standing: {
-          frames: [{ src: wallSprite, x: 0, y: 1 }],
-          index: 0
-        }
+  const makeWall = ({ x, y }) => ({
+    x,
+    y,
+    currentState: "standing",
+    states: {
+      standing: {
+        frames: [{ src: wallSprite, x: 0, y: 1 }],
+        index: 0
       }
     }
-  ];
+  });
+
+  const walls = [makeWall({ x: 1, y: 1 }), makeWall({ x: 2, y: 1 })];
 
   let totalTime = 0;
 
