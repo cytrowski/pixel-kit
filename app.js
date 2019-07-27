@@ -37,6 +37,14 @@ const play = async () => {
     tileHeight: 16
   });
 
+  const foodSprite = await getImageAsset({
+    src: "items.png",
+    width: 128,
+    height: 256,
+    tileWidth: 16,
+    tileHeight: 16
+  });
+
   const makePlayer = ({ x, y }) => ({
     x,
     y,
@@ -88,6 +96,24 @@ const play = async () => {
     }
   });
 
+  const makeFood = ({ x, y }) => ({
+    x,
+    y,
+    currentState: "smellingGood",
+    states: {
+      smellingGood: {
+        frames: [
+          {
+            src: foodSprite,
+            x: 4,
+            y: 0
+          }
+        ],
+        index: 0
+      }
+    }
+  });
+
   const cellsMap = [
     "##############",
     "#   #        #",
@@ -116,6 +142,18 @@ const play = async () => {
     .filter(item => item.char === " ")
     .map(({ x, y }) => makeFloor({ x, y }));
 
+  const foods = [];
+  const putFoodOnTheFloor = () => {
+    if (foods.length > 0) {
+      return;
+    }
+    let foodFloorTile = floors[Math.floor(Math.random() * floors.length)];
+
+    if (foodFloorTile !== undefined) {
+      foods.push(makeFood({ x: foodFloorTile.x, y: foodFloorTile.y }));
+    }
+  };
+
   let totalTime = 0;
   let isPlaying = true;
 
@@ -135,7 +173,10 @@ const play = async () => {
     }
 
     hungerBar.style.width = player.hunger + "%";
-    objects.forEach(object => {
+
+    putFoodOnTheFloor();
+
+    objects.concat(foods).forEach(object => {
       const state = object.states[object.currentState];
       const frame = state.frames[state.index];
       ctx.drawImage(
@@ -198,6 +239,12 @@ const play = async () => {
       if (player.x === wall.x && player.y === wall.y) {
         player.x = currentPosition.x;
         player.y = currentPosition.y;
+      }
+    });
+    foods.forEach((food, index) => {
+      if (food.x === player.x && food.y === player.y) {
+        player.hunger = Math.min(player.hunger + 50, 100);
+        foods.splice(index, 1);
       }
     });
   });
