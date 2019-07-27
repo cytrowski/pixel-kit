@@ -37,6 +37,14 @@ const play = async () => {
     tileHeight: 16
   });
 
+  const foodSprite = await getImageAsset({
+    src: "items.png",
+    width: 128,
+    height: 256,
+    tileWidth: 16,
+    tileHeight: 16
+  });
+
   const makePlayer = ({ x, y }) => ({
     x,
     y,
@@ -62,6 +70,29 @@ const play = async () => {
   const player = makePlayer({
     x: 1,
     y: 1
+  });
+
+  const makeFood = ({ x, y }) => ({
+    x,
+    y,
+    currentState: "smellingGood",
+    states: {
+      smellingGood: {
+        frames: [
+          {
+            src: foodSprite,
+            x: 4,
+            y: 0
+          }
+        ],
+        index: 0
+      }
+    }
+  });
+
+  const food = makeFood({
+    x: 6,
+    y: 10
   });
 
   const makeWall = ({ x, y }) => ({
@@ -119,7 +150,7 @@ const play = async () => {
   let totalTime = 0;
   let isPlaying = true;
 
-  const objects = [...floors, ...walls, player];
+  const objects = [...floors, ...walls, player, food];
   const hungerBar = document.getElementById("hunger-bar");
   const healthBar = document.getElementById("health-bar");
 
@@ -199,8 +230,35 @@ const play = async () => {
         player.x = currentPosition.x;
         player.y = currentPosition.y;
       }
+      if (food.x === wall.x && food.y === wall.y) {
+        food.x = Math.floor(Math.random() * boardWidth);
+        food.y = Math.floor(Math.random() * boardHeight);
+      }
     });
+    if (food.x === player.x && food.y === player.y) {
+      verifyFoodPosition(food.x, food.y);
+      player.hunger >= 70 ? (player.hunger = 100) : (player.hunger += 30);
+    }
   });
+
+  const verifyFoodPosition = (x, y) => {
+    // choose new food position
+    food.x = Math.floor(Math.random() * boardWidth);
+    food.y = Math.floor(Math.random() * boardHeight);
+
+    // check if the food collides with walls
+    walls.forEach(wall => {
+      if (food.x === wall.x && food.y === wall.y) {
+        // if collides then try the function again
+        verifyFoodPosition(food.x, food.y);
+      } else {
+        // make food with the function's arguments
+        makeFood(x, y);
+      }
+    });
+  };
+
+  verifyFoodPosition(food.x, food.y);
 };
 
 play();
